@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+    
+
+    <!--comentado para firebase
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    -->
+    
+
+
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- Color theme for statusbar -->
+    <!-- <meta name="theme-color" content="#2196f3"> -->
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Your app title -->
+    <title>My App</title>
+    <!-- Path to Framework7 Library CSS -->
+    <link rel="stylesheet" href="lib/framework7/framework7-bundle.min.css">
+    <!-- Path to icons -->
+    <link rel="stylesheet" href="css/icons.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Statusbar overlay -->
+        <div class="statusbar"></div>
+    
+        <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+       
+            <!-- Top Navbar -->
+            <div class="navbar">
+                <div class="navbar-bg"></div>
+                <div class="navbar-inner">
+                    <div class="left"><i class="icon icon-back"></i></div>
+                    <div class="title">BotanAPP</div>
+                    <div class="right"><i class="icon icon-forward"></i></div>
+                </div>
+            </div>
+    
+            <!-- Toolbar -->
+            <div class="toolbar toolbar-bottom">
+                <div class="toolbar-inner">
+                <!-- Toolbar links -->
+                <a href="#" class="link">Link 1</a>
+                <a href="#" class="link">Link 2</a>
+                </div>
+            </div>
+        
+        <!-- Initial Page, "data-name" contains page name -->
+            <div data-name="index" class="page">
+                <!-- Scrollable page content -->
+                <div class="page-content">
+                    <div class="block">
+                        
+                       <!-- <p>Page content goes here</p> -->
+
+                            <div class="block-title">BIENVENIDO A LA COCINA</div>
+                            <div class="list inline-labels no-hairlines-md">
+                               <ul>
+                                 <li class="item-content item-input">
+                                   <div class="item-media">
+                                     <i class="icon demo-list-icon"></i>
+                                   </div>
+                                   <div class="item-inner">
+                                     <div class="item-input-wrap">
+                                       <input type="text" placeholder="email" />
+                                       <span class="input-clear-button"></span>
+                                     </div>
+                                   </div>
+                                 </li>
+                                 <li class="item-content item-input">
+                                   <div class="item-media">
+                                     <i class="icon demo-list-icon"></i>
+                                   </div>
+                                   <div class="item-inner">
+                                     <div class="item-input-wrap">
+                                       <input type="password" placeholder="contraseña" />
+                                       <span class="input-clear-button"></span>
+                                     </div>
+                                   </div>
+                                 </li>
+                                </ul>
+                            </div>
+                            
+                            </br>
+                            <button class="col button button-fill color-orange" id="inic">ingresar</button>
+                            <br>
+                            <button class="col button button-fill color-orange" id="pasr">registrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+
+    <!--firebase-->
+  
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+    
+    <!--sin usar 
+    
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    
+    -->
+
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCykBxRQZ4uIBLQ-YPkwv01l5SHda97p-4",
+          authDomain: "botanapp-fa14b.firebaseapp.com",
+          projectId: "botanapp-fa14b",
+          storageBucket: "botanapp-fa14b.appspot.com",
+          messagingSenderId: "304739930127",
+          appId: "1:304739930127:web:05469714c728430577937a",
+          measurementId: "G-0Y6X2YQ8NK"
+        };
+    </script>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="lib/framework7/framework7-bundle.min.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+</body>
+
+</html>
+
