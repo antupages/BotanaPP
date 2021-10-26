@@ -15,6 +15,7 @@ var app = new Framework7({
     },
     // Add default routes
     routes: [
+      {path: '/index/',url: 'index.html',},
       {path: '/prin/',url: 'prin.html',},
       {path: '/misrecetas/',url: 'misrecetas.html',},
       {path: '/ingredientes/',url: 'ingredientes.html',},
@@ -78,22 +79,49 @@ $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
 var email
 var cont1
 var cont2
+var usuario
 
-//--------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 //mis fun
+
 function iniciar(){
+        // cada un@ pone su magia para recuperar el mail y la clave de un form...
+    var emailDelUser = $$("#iEmail").val();
+    var passDelUser = $$("#iCont").val();
+
+    firebase.auth().signInWithEmailAndPassword(emailDelUser, passDelUser)
+    .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+
+    console.log("Bienvenid@!!! " + emailDelUser);
     mainView.router.navigate('/prin/');
+    usuario = emailDelUser
+    // ...
+    })
+    .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+
+    console.error(errorCode);
+        console.error(errorMessage);
+        $$("#Eing").html(errorMessage);
+    });
 
 }
+
+
 function pasreg(){
     mainView.router.navigate('/registro/');
 
 }
+
+
 function autenticar(){
-    email = $$("#rEmail").value()
-    cont1 = $$("#c1").value()
-    cont2 = $$("#c2").value()
+    email = $$("#rEmail").val();
+    cont1 = $$("#c1").val();
+    cont2 = $$("#c2").val();
 
 
     if (cont1==cont2) {
@@ -113,7 +141,8 @@ function autenticar(){
             console.log("error"+ errorMessage);
         // ..
       });
-    
-    }
     mainView.router.navigate('/index/');
+    }else   {
+        $$("#diferen").html("las contraseñas no coinciden")
+    }
 }
