@@ -85,3 +85,14 @@
 }
 
 
+
+
+.visible {
+  display: block;
+  visibility: visible;
+}
+
+.oculto {
+  display: none;
+  visibility: hidden;
+}

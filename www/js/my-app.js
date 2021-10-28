@@ -57,6 +57,7 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     console.log(e);
     console.log('pag principal cargada');
+    //capasidad()
 })
 
 
@@ -68,8 +69,15 @@ $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
     console.log(e);
     console.log('pag registro cargada');
     $$("#registrar").on("click", autenticar)
+    $$("#registrar").on("click", regbd)
 })
 
+$$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
+    // Do something here when page with data-name="about" attribute loaded and initialized
+    console.log(e);
+    console.log('pag ingredientes cargada');
+    admcar()
+})
 
 
 
@@ -80,6 +88,9 @@ var email
 var cont1
 var cont2
 var usuario
+var status
+var db = firebase.firestore()
+var Refusuario = db.collection("usuarios").doc("usID");//referencia a usuario 
 
 //---------------------------------------------------------------------------------------
 
@@ -146,3 +157,56 @@ function autenticar(){
         $$("#diferen").html("las contraseñas no coinciden")
     }
 }
+
+
+
+// base de datos 
+
+function regbd() {
+//var datos usuario    
+    var usID = $$("#rEmail").val()
+    var apellido = $$("#rApellido").val()
+    var nombre = $$("#rNombre").val()
+
+//carga de datos a bd de usuarios
+    var data = {
+            nombre: nombre,
+            apellido: apellido,
+            rol: "usuario",
+    };
+
+    //db.collection("usuarios").add(data)
+    //db.collection("usuarios").doc(usID).set(data)
+    db.collection("usuarios").doc(usID).set(data)
+    .then(function() { // .then((docRef) => {
+    console.log("OK!");
+    })
+    .catch(function(error) { // .catch((error) => {
+    console.log("Error es de db: " + error);
+    });
+}
+
+
+//funciones para admins 
+function admcar(){
+if (status == "admin") {
+    $$("#admincar").removeClass('oculto').addClass('visible');
+}
+}
+
+
+/*
+
+function capasidad() {
+Refusuario.get().then((doc) => {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
+
+} */
