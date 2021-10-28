@@ -57,7 +57,7 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     console.log(e);
     console.log('pag principal cargada');
-    //capasidad()
+    //capacidad()
 })
 
 
@@ -76,7 +76,7 @@ $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     console.log(e);
     console.log('pag ingredientes cargada');
-    admcar()
+    //admcar()
 })
 
 
@@ -90,7 +90,7 @@ var cont2
 var usuario
 var status
 var db = firebase.firestore()
-var Refusuario = db.collection("usuarios").doc("usID");//referencia a usuario 
+var Refusuario = db.collection("usuarios");//referencia a usuario 
 
 //---------------------------------------------------------------------------------------
 
@@ -98,18 +98,34 @@ var Refusuario = db.collection("usuarios").doc("usID");//referencia a usuario
 
 function iniciar(){
         // cada un@ pone su magia para recuperar el mail y la clave de un form...
-    var emailDelUser = $$("#iEmail").val();
+    email = $$("#iEmail").val();
     var passDelUser = $$("#iCont").val();
 
-    firebase.auth().signInWithEmailAndPassword(emailDelUser, passDelUser)
+    firebase.auth().signInWithEmailAndPassword(email, passDelUser)
     .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
 
-    console.log("Bienvenid@!!! " + emailDelUser);
-    mainView.router.navigate('/prin/');
-    usuario = emailDelUser
-    // ...
+
+///----------------    
+
+    console.log("Bienvenid@!!! " + email );
+    
+    usuario = email
+
+    //tipo usuario 
+    console.log(email)
+    Refusuario.doc(email).get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            rol = doc.data().rol;
+            mainView.router.navigate('/prin/');
+        }else{console.error("doc no existe")}
+    }
+    );
+
+
+        // ...
     })
     .catch((error) => {
     var errorCode = error.code;
@@ -177,7 +193,7 @@ function regbd() {
 
     //db.collection("usuarios").add(data)
     //db.collection("usuarios").doc(usID).set(data)
-    db.collection("usuarios").doc(usID).set(data)
+    Refusuario.doc(usID).set(data)
     .then(function() { // .then((docRef) => {
     console.log("OK!");
     })
@@ -188,6 +204,7 @@ function regbd() {
 
 
 //funciones para admins 
+
 function admcar(){
 if (status == "admin") {
     $$("#admincar").removeClass('oculto').addClass('visible');
@@ -195,18 +212,18 @@ if (status == "admin") {
 }
 
 
-/*
 
-function capasidad() {
-Refusuario.get().then((doc) => {
-    if (doc.exists) {
-        console.log("Document data:", doc.data());
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-    }
-}).catch((error) => {
-    console.log("Error getting document:", error);
-});
+/*
+function capacidad() {
+    Refusuario.doc(email).get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
 
 } */
