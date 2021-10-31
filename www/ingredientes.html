@@ -13,35 +13,33 @@
     </div>
     <div class="page-content">
         <div class="block-title">ingredientes</div>
-        <div class="block block-strong">
-        
-
-        
+        <div class="block block-strong">   
             <div class="col-10">
                 <a href="/prin/">principal</a>
             </div>
 
 
-            <div class="oculto" id="admincar"><!-- para admins -->
-                <div><h1>para que admins carguen al sistema</h1></div><br>
-                <div><h1> nuevos ingredientes</h1></div>
-                <div class="item-title item-label">cargar</div>
-                <div class="item-input-wrap">
-                    <input type="text" placeholder="ingrediente" id="ingds" />
-                    <span class="input-clear-button"></span>
-                </div> 
-                <div class="item-input-wrap">
-                    <input type="text" placeholder="unidad" id="uni" />
-                    <span class="input-clear-button"></span>
-                </div> 
-                <button class="col button button-fill color-orange" id="admnag">agregar</button> 
-            </div>
-
-
-
-
-
-        
+            <!--    PANEL DE ADMIN   -->
+            <div class="oculto" id="admincar" style="background: blue;"><!-- para admins -->
+                <div>cargar nuevos ingredientes a BD</div><br>
+                <div class="row no-gap">
+                    <div class="col-40">
+                        <div class="item-input-wrap">
+                            <input type="text" placeholder="ingrediente" id="ingds" />
+                            <span class="input-clear-button"></span>
+                        </div> 
+                    </div>
+                    <div class="col-40">  
+                        <div class="item-input-wrap">
+                            <input type="text" placeholder="unidad" id="uni" />
+                            <span class="input-clear-button"></span>
+                        </div> 
+                    </div>
+                    <div class="col-10">
+                        <button class="col button button-fill color-orange" id="admnag"><h2>+</h2></button>
+                    </div>
+               </div>
+            </div>       
         </div>
     </div>
 </div>
