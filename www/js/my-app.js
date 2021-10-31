@@ -76,7 +76,14 @@ $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     console.log(e);
     console.log('pag ingredientes cargada');
-    //admcar()
+
+    console.log(rol)
+    if (rol == "admin") {
+        $$("#admincar").removeClass('oculto').addClass('visible');
+    }
+
+    $$("#admnag").on("click", Ningrediente);
+
 })
 
 
@@ -88,9 +95,10 @@ var email
 var cont1
 var cont2
 var usuario
-var status
+var rol
 var db = firebase.firestore()
 var Refusuario = db.collection("usuarios");//referencia a usuario 
+var Refingredientes = db.collection("ingrediente");//referencia a usuario 
 
 //---------------------------------------------------------------------------------------
 
@@ -119,6 +127,7 @@ function iniciar(){
         if (doc.exists) {
             console.log("Document data:", doc.data());
             rol = doc.data().rol;
+            console.log(rol)
             mainView.router.navigate('/prin/');
         }else{console.error("doc no existe")}
     }
@@ -191,8 +200,6 @@ function regbd() {
             rol: "usuario",
     };
 
-    //db.collection("usuarios").add(data)
-    //db.collection("usuarios").doc(usID).set(data)
     Refusuario.doc(usID).set(data)
     .then(function() { // .then((docRef) => {
     console.log("OK!");
@@ -205,25 +212,24 @@ function regbd() {
 
 //funciones para admins 
 
-function admcar(){
-if (status == "admin") {
-    $$("#admincar").removeClass('oculto').addClass('visible');
-}
-}
+function Ningrediente(){
 
+    var ingrediente = $$("#ingds").val()
+    var unidad = $$("#uni").val()
 
+    //cargar ingredientes en bd
 
-/*
-function capacidad() {
-    Refusuario.doc(email).get().then((doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
+    var data = {
+            unidad: unidad,
+    };
+
+    Refingredientes.doc(ingrediente).set(data)
+    .then(function() { // .then((docRef) => {
+        console.log("OK!");
+    })
+    .catch(function(error) { // .catch((error) => {
+        console.log("Error es de db: " + error);
     });
 
-} */
+
+}
