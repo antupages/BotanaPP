@@ -20,7 +20,7 @@ var app = new Framework7({
       {path: '/misrecetas/',url: 'misrecetas.html',},
       {path: '/ingredientes/',url: 'ingredientes.html',},
       {path: '/perfil/',url: 'perfil.html',},
-      {path: '/recetas/',url: 'recetas.html',},
+      {path: '/receta/',url: 'receta.html',},
       {path: '/masrecetas/',url: 'masrecetas.html',},
       {path: '/registro/',url: 'registro.html',},
       
@@ -91,6 +91,7 @@ $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
     console.log('masrecetas cargada');
     $$("#AGpaso").on("click",maspaso);
     $$("#AGing").on("click",masing);
+    $$("#nueRes").on("click",Nreceta);
 })
 
 
@@ -107,10 +108,15 @@ var rol
 var num = 0
 var receta =""
 var ingrec =""
-//-----
+var ingredientesR
+//----- 
 var db = firebase.firestore()
 var Refusuario = db.collection("usuarios");//referencia a usuario 
 var Refingredientes = db.collection("ingrediente");//referencia a usuario 
+var Refreceta = db.collection("recetas");//referencia a recetas 
+
+
+
 
 //---------------------------------------------------------------------------------------
 
@@ -141,8 +147,6 @@ function iniciar(){
         }else{console.error("doc no existe")}
     }
     );
-
-
         // ...
     })
     .catch((error) => {
@@ -218,8 +222,51 @@ function masing() {
     var ing = $$("#eling").val()
     $$("#Cing").append(ing + " / ")
     $$("#eling").val("")
+}
+function Nreceta() {
+    var nombrereceta =$$("#nombrereceta").val();
+    var ingredientesR = $$("Cing").text();
+    var pasosCR = $$("#CrecP").text();
+    var data = {
+            pasos_receta: pasosCR ,
+            ingredientes_receta: ingredientesR,
+            creador: email,
+        }
+
+    Refreceta.doc(nombrereceta).set(data)
+    .then(function() { // .then((docRef) => {
+        console.log("OK!");
+    })
+    .catch(function(error) { // .catch((error) => {
+        console.log("Error es de db: " + error);
+    });
+}
+
+function Ningredieuario(){
+
+    var ingredients = $$("#ingus").val()   
+    var data = {
+             ingredients: ingredinete,       
+        };
+
+    Refusuario.doc(email).set(data)
+    .then(function() { // .then((docRef) => {
+        console.log("OK!");
+    })
+    .catch(function(error) { // .catch((error) => {
+        console.log("Error es de db: " + error);
+    });
+
 
 }
+
+
+
+
+
+
+
+
 
 //funciones para admins ---------------------------------------------------------
 
