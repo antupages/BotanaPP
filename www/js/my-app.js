@@ -222,18 +222,21 @@ function masing() {
     var ing = $$("#eling").val()
     $$("#Cing").append(ing + " / ")
     $$("#eling").val("")
+    ingredientesR += $$("#eling").val() 
 }
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
-    var ingredientesR = $$("Cing").text();
     var pasosCR = $$("#CrecP").text();
     var data = {
-            pasos_receta: pasosCR ,
+            nombre: nombrereceta,
+            pasos_receta: pasosCR,
             ingredientes_receta: ingredientesR,
             creador: email,
         }
 
-    Refreceta.doc(nombrereceta).set(data)
+    var idreceta = nombrereceta +"-"+ email
+
+    Refreceta.doc(idreceta).set(data)
     .then(function() { // .then((docRef) => {
         console.log("OK!");
     })
