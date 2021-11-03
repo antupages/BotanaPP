@@ -20,6 +20,7 @@ var app = new Framework7({
       {path: '/misrecetas/',url: 'misrecetas.html',},
       {path: '/ingredientes/',url: 'ingredientes.html',},
       {path: '/perfil/',url: 'perfil.html',},
+      {path: '/receta/:id/',url: 'receta.html',},//recetas por id 
       {path: '/receta/',url: 'receta.html',},
       {path: '/masrecetas/',url: 'masrecetas.html',},
       {path: '/registro/',url: 'registro.html',},
@@ -59,6 +60,7 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
     console.log('pag principal cargada');
+    prinrec()
 })
 
 
@@ -82,6 +84,19 @@ $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
     console.log('misrecetas cargada');
+})
+
+$$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
+    // Do something here when page with data-name="about" attribute loaded and initialized
+    //console.log(e);
+    console.log('receta cargada');
+    console.log('Pag. Detalle con id: ' + page.route.params.id );
+
+    console.log(rol)
+    if (rol == "admin") {
+        $$("#borrarreceta").removeClass('oculto').addClass('visible');
+    }
+
 })
 
 
@@ -116,26 +131,21 @@ var Refingredientes = db.collection("ingrediente");//referencia a usuario
 var Refreceta = db.collection("recetas");//referencia a recetas 
 
 
-
-
 //---------------------------------------------------------------------------------------
+
+
 
 //mis fun--------------------------------------------------------------------------------
 
 function iniciar(){
     email = $$("#iEmail").val();
     var passDelUser = $$("#iCont").val();
-
     firebase.auth().signInWithEmailAndPassword(email, passDelUser)
     .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    
-
-    console.log("Bienvenid@!!! " + email );
-    
+    console.log("Bienvenid@!!! " + email );    
     usuario = email
-
     //tipo usuario 
     console.log(email)
     Refusuario.doc(email).get().then((doc) => {
@@ -147,37 +157,29 @@ function iniciar(){
         }else{console.error("doc no existe")}
     }
     );
-        // ...
     })
     .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.message;
-
     console.error(errorCode);
         console.error(errorMessage);
         $$("#Eing").html(errorMessage);
     });
-
 }
 
 function autenticar(){
     email = $$("#rEmail").val();
     cont1 = $$("#c1").val();
     cont2 = $$("#c2").val();
-    
     if (cont1==cont2) {
         console.log("contraseñas validas")
         password = cont1 
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // Signed in
             var user = userCredential.user;
-            //console.log("usuario creado email:"email+" id:"userCredential )
-            // ...
             var usID = $$("#rEmail").val()
             var apellido = $$("#rApellido").val()
             var nombre = $$("#rNombre").val()
-            //carga de datos a bd de usuarios
             var data = {
                 nombre: nombre,
                 apellido: apellido,
@@ -203,7 +205,6 @@ function autenticar(){
     }
 }
 
-
 //cargar recetas -----------------------------------------------------------------
 
 function maspaso (){
@@ -211,19 +212,16 @@ function maspaso (){
     num++
     paso = $$("#elpaso").val()
     $$("#CrecP").append(num + "-  "+ paso +"<br>")
-    //receta = $$('#CrecP').text();
     $$("#elpaso").val("")
-    //console.log(receta)
-    //los comentados hay que moverlos para cuando se cargue la reseta en la bd
-
 }
 
 function masing() {
     var ing = $$("#eling").val()
     $$("#Cing").append(ing + " / ")
     $$("#eling").val("")
-    ingredientesR += $$("#eling").val() 
+    ingredientesR += $$("#eling").val(); 
 }
+
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
     var pasosCR = $$("#CrecP").text();
@@ -233,9 +231,7 @@ function Nreceta() {
             ingredientes_receta: ingredientesR,
             creador: email,
         }
-
     var idreceta = nombrereceta +"-"+ email
-
     Refreceta.doc(idreceta).set(data)
     .then(function() { // .then((docRef) => {
         console.log("OK!");
@@ -246,12 +242,10 @@ function Nreceta() {
 }
 
 function Ningredieuario(){
-
     var ingredients = $$("#ingus").val()   
     var data = {
              ingredients: ingredinete,       
         };
-
     Refusuario.doc(email).set(data)
     .then(function() { // .then((docRef) => {
         console.log("OK!");
@@ -259,28 +253,16 @@ function Ningredieuario(){
     .catch(function(error) { // .catch((error) => {
         console.log("Error es de db: " + error);
     });
-
-
 }
-
-
-
-
-
-
-
-
 
 //funciones para admins ---------------------------------------------------------
 
 function Ningrediente(){
-
     var ingrediente = $$("#ingds").val()
     var unidad = $$("#uni").val()
     var data = {
             unidad: unidad,
     };
-
     Refingredientes.doc(ingrediente).set(data)
     .then(function() { // .then((docRef) => {
         console.log("OK!");
@@ -288,6 +270,32 @@ function Ningrediente(){
     .catch(function(error) { // .catch((error) => {
         console.log("Error es de db: " + error);
     });
+}
+
+
+
+
+function prinrec (){
+    console.log("carga bd recetas");
+    Refreceta.orderBy("nombre")
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id, " => ", doc.data())
+            console.log(doc.id, " => ", doc.data().nombre ," / " ,doc.data().creador)
+            var linkreceta = `<center><div class="col-90"><a href="/receta/`+doc.id+`">`+doc.data().nombre+`</a></div></center>`
+            $$("#reprin").append(linkreceta);            
+
+        });
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+
+
+
+
 
 
 }
