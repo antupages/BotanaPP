@@ -24,7 +24,6 @@ var app = new Framework7({
       {path: '/receta/',url: 'receta.html',},
       {path: '/masrecetas/',url: 'masrecetas.html',},
       {path: '/registro/',url: 'registro.html',},
-      
     ]
     // ... other parameters
   });
@@ -64,9 +63,6 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
 })
 
 
-
-
-
 $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     //Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
@@ -84,6 +80,7 @@ $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
     console.log('misrecetas cargada');
+    misrecetasmostrar()
 })
 
 $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
@@ -91,31 +88,17 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     //console.log(e);
     console.log('receta cargada');
     console.log('Pag. Detalle con id: ' + page.route.params.id );
-    preprece()
+    preprece(page.route.params.id)
 
     
     console.log(email)
     console.log(rol)
 
-    if (email == doc.data().creador ) {
-        $$("#borrarreceta").removeClass('oculto').addClass('visible');
-    }
+    
 
     if (rol == "admin") {
         $$("#borrarreceta").removeClass('oculto').addClass('visible');
     }
-
-    /*
-    Refreceta.get().then((doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            console.log("No such document!");
-        }
-        }).catch((error) => {
-        console.log("Error getting document:", error);
-        });
-    */
 
 
 
@@ -304,7 +287,7 @@ function prinrec (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<center><div class="col-90"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div></center>`
+            var linkreceta = `<div class="col-100"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
             $$("#reprin").append(linkreceta);            
         });
     })
@@ -313,21 +296,57 @@ function prinrec (){
     });
 
 
+}
+
+function preprece(id) {
+
+    //console.log(doc.data().nombre + " - " + doc.id )
+    Refreceta.doc(id).get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            $$("#Titlereceta").html(doc.data().nombre);
+            $$("#ingredientes").html(doc.data().ingredientes_receta);
+            $$("#creador").html(doc.data().creador);
+            $$("#receta").html(doc.data().pasos_receta);
+            
+            if (email ==  doc.data().creador  ) {
+                $$("#borrarreceta").removeClass('oculto').addClass('visible');
+            }
+
+        } else {
+            console.log("No such document!");
+        }
+        }).catch((error) => {
+        console.log("Error getting document:", error);
+        });
+    
+    
+
+}
 
 
+
+function misrecetasmostrar (){
+    Refreceta.where("creador", "==", email )  
+    .get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            var linkreceta = `<div class="col-50"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
+                $$("#misrec").append(linkreceta);            
+        });
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
 
 
 }
 
-function preprece() {
 
 
-    console.log(doc.data().nombre + " - " + doc.id )
-    /*
-    $$("#Titlereceta").html(doc.data().nombre);
-    $$("#ingredientes").html(doc.data().ingredientes_receta);
-    $$("#creador").html(doc.data().creador);
-    $$("#receta").html(doc.data().pasos_receta);
-    */
 
-}
+/*
+        <div class="col-50"></div>
+        
+
+*/
