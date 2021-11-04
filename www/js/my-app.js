@@ -91,21 +91,34 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     //console.log(e);
     console.log('receta cargada');
     console.log('Pag. Detalle con id: ' + page.route.params.id );
-    preprece
+    preprece()
 
     
     console.log(email)
+    console.log(rol)
+
     if (email == doc.data().creador ) {
         $$("#borrarreceta").removeClass('oculto').addClass('visible');
     }
 
-
-
-
-    console.log(rol)
     if (rol == "admin") {
         $$("#borrarreceta").removeClass('oculto').addClass('visible');
     }
+
+    /*
+    Refreceta.get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            console.log("No such document!");
+        }
+        }).catch((error) => {
+        console.log("Error getting document:", error);
+        });
+    */
+
+
+
 
 })
 
@@ -291,12 +304,8 @@ function prinrec (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            //console.log(doc.id, " => ", doc.data())
-            //console.log(doc.id, " => ", doc.data().nombre ," / " ,doc.data().creador)
             var linkreceta = `<center><div class="col-90"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div></center>`
             $$("#reprin").append(linkreceta);            
-
         });
     })
     .catch((error) => {
@@ -314,10 +323,11 @@ function preprece() {
 
 
     console.log(doc.data().nombre + " - " + doc.id )
+    /*
     $$("#Titlereceta").html(doc.data().nombre);
     $$("#ingredientes").html(doc.data().ingredientes_receta);
     $$("#creador").html(doc.data().creador);
     $$("#receta").html(doc.data().pasos_receta);
-
+    */
 
 }
