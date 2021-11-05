@@ -21,7 +21,6 @@ var app = new Framework7({
       {path: '/ingredientes/',url: 'ingredientes.html',},
       {path: '/perfil/',url: 'perfil.html',},
       {path: '/receta/:id/',url: 'receta.html',},//recetas por id 
-      {path: '/receta/',url: 'receta.html',},
       {path: '/masrecetas/',url: 'masrecetas.html',},
       {path: '/registro/',url: 'registro.html',},
     ]
@@ -88,58 +87,39 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     //console.log(e);
     console.log('receta cargada');
     console.log('Pag. Detalle con id: ' + page.route.params.id );
-    preprece(page.route.params.id)
-
-    
+    preprece(page.route.params.id)    
     console.log(email)
     console.log(rol)
-
-    
-
     if (rol == "admin") {
         $$("#borrarreceta").removeClass('oculto').addClass('visible');
     }
-
-
-
-
 })
 
 
 $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
-    // Do something here when page with data-name="about" attribute loaded and initialized
-    //console.log(e);
     console.log('masrecetas cargada');
-    $$("#AGpaso").on("click",maspaso);
-    $$("#AGing").on("click",masing);
-    $$("#nueRes").on("click",Nreceta);
+    $$("#AGpaso").on("click", maspaso);
+    $$("#AGing").on("click", masing);
+    $$("#nueRes").on("click", Nreceta);
+    //$$("#limRes").on("click", limRes)
 })
 
+//mis var---------------------------------------------------------------------------------
 
 
-//---------------------------------------------------------------------------------------
-
-//mis var
 var email
 var cont1
 var cont2
 var usuario
 var rol
-//-----
 var num = 0
 var receta =""
 var ingrec =""
-var ingredientesR
-//----- 
+var ingredientesR =""
 var db = firebase.firestore()
 var Refusuario = db.collection("usuarios");//referencia a usuario 
 var Refingredientes = db.collection("ingrediente");//referencia a usuario 
 var Refreceta = db.collection("recetas");//referencia a recetas 
-
-
-//---------------------------------------------------------------------------------------
-
-
 
 //mis fun--------------------------------------------------------------------------------
 
@@ -211,8 +191,6 @@ function autenticar(){
     }
 }
 
-//cargar recetas -----------------------------------------------------------------
-
 function maspaso (){
     var paso = ""
     num++
@@ -224,8 +202,9 @@ function maspaso (){
 function masing() {
     var ing = $$("#eling").val()
     $$("#Cing").append(ing + " / ")
+    ingredientesR += $$("#eling").val()+" / "; 
     $$("#eling").val("")
-    ingredientesR += $$("#eling").val(); 
+    
 }
 
 function Nreceta() {
@@ -261,8 +240,6 @@ function Ningredieuario(){
     });
 }
 
-//funciones para admins ---------------------------------------------------------
-
 function Ningrediente(){
     var ingrediente = $$("#ingds").val()
     var unidad = $$("#uni").val()
@@ -278,9 +255,6 @@ function Ningrediente(){
     });
 }
 
-
-
-
 function prinrec (){
     console.log("carga bd recetas");
     Refreceta.orderBy("nombre")
@@ -294,13 +268,9 @@ function prinrec (){
     .catch((error) => {
         console.log("Error getting documents: ", error);
     });
-
-
 }
 
 function preprece(id) {
-
-    //console.log(doc.data().nombre + " - " + doc.id )
     Refreceta.doc(id).get().then((doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
@@ -308,23 +278,16 @@ function preprece(id) {
             $$("#ingredientes").html(doc.data().ingredientes_receta);
             $$("#creador").html(doc.data().creador);
             $$("#receta").html(doc.data().pasos_receta);
-            
             if (email ==  doc.data().creador  ) {
                 $$("#borrarreceta").removeClass('oculto').addClass('visible');
             }
-
-        } else {
+        }else {
             console.log("No such document!");
         }
         }).catch((error) => {
         console.log("Error getting document:", error);
         });
-    
-    
-
 }
-
-
 
 function misrecetasmostrar (){
     Refreceta.where("creador", "==", email )  
@@ -338,15 +301,13 @@ function misrecetasmostrar (){
     .catch((error) => {
         console.log("Error getting documents: ", error);
     });
-
-
 }
 
 
-
-
 /*
-        <div class="col-50"></div>
-        
-
+function limpiar (){
+    $$("#elpaso").val("")
+    $$("#eling").val("")
+    $$("#nombrereceta").val("")
+}
 */
