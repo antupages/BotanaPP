@@ -84,7 +84,7 @@
 	font-family: 'Poppins', Arial, sans-serif;
 }
 
-
+/*  css mio app   */
 
 
 .visible {
@@ -97,3 +97,21 @@
   visibility: hidden;
 }
 
+
+.flex {
+  display: flex;
+}
+
+.fondo {
+  align-self: flex-end;
+}
+
+.double {
+  border-style: double;
+  width: 90%;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+  background-color: orange;
+  text-align: center;
+}

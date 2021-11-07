@@ -261,7 +261,7 @@ function prinrec (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-100"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
+            var linkreceta = `<div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
             $$("#reprin").append(linkreceta);            
         });
     })
@@ -294,7 +294,7 @@ function misrecetasmostrar (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-50"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
+            var linkreceta = `<div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
                 $$("#misrec").append(linkreceta);            
         });
     })
