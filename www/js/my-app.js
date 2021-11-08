@@ -59,6 +59,22 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     //console.log(e);
     console.log('pag principal cargada');
     prinrec()
+
+    searchbar = app.searchbar.create({
+        el: '.searchbar',
+        searchContainer: '.list',
+        searchIn: '.item-title',
+        on: {
+            search(sb, query, previousQuery) {
+            console.log(query, previousQuery);
+            }
+        }
+    })
+
+
+
+
+
 })
 
 
@@ -261,7 +277,11 @@ function prinrec (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
+            var linkreceta =`<li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"><div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div></div>
+                                </div>
+                            </li>`
             $$("#reprin").append(linkreceta);            
         });
     })
