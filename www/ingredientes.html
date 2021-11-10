@@ -12,29 +12,25 @@
         </div>
     </div>
     <div class="page-content">
-        <div class="block-title">ingredientes</div>
-        <div class="block block-strong">   
-            <div class="col-10">
-                <a href="/prin/">principal</a>
+        <div class="row">
+            <div class="col-100"><h1>ingredientes</h1></div>
+            <div class="col-80">
+                <a class="item-link smart-select smart-select-init" data-open-in="popover" id="seleccioning">
+                    <select name="ingredientes" id="ingrediesusu" multiple>
+                    </select>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">ingrediente</div>
+                        </div>
+                    </div>
+                </a>
             </div>
-
-
-            <div class="row">
-                <div class="col-80">
-                    <div class="item-input-wrap">
-                        <input type="text" placeholder="agrega tu ingrediente" id="ingus" />
-                        <span class="input-clear-button"></span>
-                    </div> 
-                </div>
-                <button class="col button button-fill color-orange" id="adingus"><h2>+</h2></button>
+            <div class="col-20">
+                <button class="col button button-fill color-orange" id="ingreusu">guardar</button>
             </div>
-
-
-
-
-
-            <!--    PANEL DE ADMIN   -->
-            <div class="oculto" id="admincar" style="background: lightblue ;">
+        </div>
+        <!--    PANEL DE ADMIN   -->
+        <div class="oculto" id="admincar" style="background: lightblue ;">
                 <div>cargar nuevos ingredientes a BD</div><br>
                 <div class="row no-gap">
                     <div class="col-40">
@@ -53,7 +49,11 @@
                         <button class="col button button-fill color-orange" id="admnag"><h2>+</h2></button>
                     </div>
                </div>
-            </div>       
+        </div>       
+        <div class="row">
+            <div class="col-45">
+                <a href="/prin/"><button class="col button button-fill color-orange" id="ingreusu">volver</button></a>
+            </div>
         </div>
     </div>
 </div>

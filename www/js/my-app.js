@@ -80,7 +80,7 @@ $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     //Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
     console.log('pag ingredientes cargada');
-
+    ingususec()
     console.log(rol)
     if (rol == "admin") {
         $$("#admincar").removeClass('oculto').addClass('visible');
@@ -113,7 +113,6 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
 $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
     console.log('masrecetas cargada');
     $$("#AGpaso").on("click", maspaso);
-    $$("#AGing").on("click", masing);
     $$("#nueRes").on("click", Nreceta);
     ingrecar()
 
@@ -214,22 +213,10 @@ function maspaso (){
     $$("#elpaso").val("")
 }
 
-function masing() {
-    //$$("#seleccioning > .item-content > .item-inner > .item-after").text()
-    //var smartSelect = app.smartSelect.create({  HTMLElement/* parameters */ })
-    
-    var ing = app.smartSelect.get('.smart-select').$selectEl.val();
-    console.log (ing)
-    
-
-    //$$("#Cing").append(ing + " / ")
-    //ingredientesR = $$("#eling").val()+" / "; 
-    
-}
-
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
     var pasosCR = $$("#CrecP").text();
+    var ingredientesR = app.smartSelect.get('.smart-select').$selectEl.val();
     var data = {
             nombre: nombrereceta,
             pasos_receta: pasosCR,
@@ -237,6 +224,7 @@ function Nreceta() {
             creador: email,
         }
     var idreceta = nombrereceta +"-"+ email
+    console.log(data , idreceta)
     Refreceta.doc(idreceta).set(data)
     .then(function() { // .then((docRef) => {
         console.log("OK!");
@@ -326,6 +314,34 @@ function misrecetasmostrar (){
         console.log("Error getting documents: ", error);
     });
 }
+
+
+
+function ingususec(){
+    var listingrerec = ""
+    var arrayingrediente =[]
+    Refingredientes.get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id);
+            sapandanga = doc.id
+            sapandanga = sapandanga.toUpperCase()
+            arrayingrediente.push(sapandanga)
+                                      
+        });
+        arrayingrediente.sort()
+        for (var i = 0 ; i < arrayingrediente.length ; i++) {
+            listingrerec += `<option value="`+arrayingrediente[i]+`">`+arrayingrediente[i]+`</option>`
+        
+        }
+        $$("#ingrediesusu").append(listingrerec); 
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+
+}
+
 
 
 function ingrecar (){
