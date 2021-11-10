@@ -73,8 +73,6 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
 
 
 
-
-
 })
 
 
@@ -117,7 +115,8 @@ $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
     $$("#AGpaso").on("click", maspaso);
     $$("#AGing").on("click", masing);
     $$("#nueRes").on("click", Nreceta);
-    //$$("#limRes").on("click", limRes)
+    ingrecar()
+
 })
 
 //mis var---------------------------------------------------------------------------------
@@ -216,10 +215,15 @@ function maspaso (){
 }
 
 function masing() {
-    var ing = $$("#eling").val()
-    $$("#Cing").append(ing + " / ")
-    ingredientesR += $$("#eling").val()+" / "; 
-    $$("#eling").val("")
+    //$$("#seleccioning > .item-content > .item-inner > .item-after").text()
+    //var smartSelect = app.smartSelect.create({  HTMLElement/* parameters */ })
+    
+    var ing = app.smartSelect.get('.smart-select').$selectEl.val();
+    console.log (ing)
+    
+
+    //$$("#Cing").append(ing + " / ")
+    //ingredientesR = $$("#eling").val()+" / "; 
     
 }
 
@@ -324,10 +328,34 @@ function misrecetasmostrar (){
 }
 
 
-/*
-function limpiar (){
-    $$("#elpaso").val("")
-    $$("#eling").val("")
-    $$("#nombrereceta").val("")
+function ingrecar (){
+    var listingrerec = ""
+    var arrayingrediente =[]
+    Refingredientes.get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id);
+            sapandanga = doc.id
+            sapandanga = sapandanga.toUpperCase()
+            arrayingrediente.push(sapandanga)
+                                      
+        });
+
+        arrayingrediente.sort()
+        for (var i = 0 ; i < arrayingrediente.length ; i++) {
+            listingrerec += `<option value="`+arrayingrediente[i]+`">`+arrayingrediente[i]+`</option>`
+
+
+        }
+
+
+
+        $$("#ingrediesmasrec").append(listingrerec); 
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+
+
 }
-*/
+
