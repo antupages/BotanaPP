@@ -107,11 +107,13 @@
 }
 
 .double {
-  border-style: double;
+  /*border-style: double;*/
   text-align: center;
   font-weight: bold;
   text-decoration: none;
   color: black;
-  background-color: orange;
+  text-decoration: none;
+  color: orange;
+  /*background-color: orange;*/
   text-align: center;
 }

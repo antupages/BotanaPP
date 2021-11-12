@@ -81,6 +81,7 @@ $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     //console.log(e);
     console.log('pag ingredientes cargada');
     ingususec()
+    $$("#ingreusu").on("click", usuariocargaringrediente)
     console.log(rol)
     if (rol == "admin") {
         $$("#admincar").removeClass('oculto').addClass('visible');
@@ -101,7 +102,8 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     //console.log(e);
     console.log('receta cargada');
     console.log('Pag. Detalle con id: ' + page.route.params.id );
-    preprece(page.route.params.id)    
+    preprece(page.route.params.id)  
+    $$("#borrarreceta").on("click", borrarrecetaBD(page.route.params.id)) 
     console.log(email)
     console.log(rol)
     if (rol == "admin") {
@@ -128,6 +130,7 @@ var usuario
 var rol
 var num = 0
 var receta =""
+var ingredientesquetieneelusuario = ""
 var ingrec =""
 var ingredientesR =""
 var db = firebase.firestore()
@@ -265,10 +268,54 @@ function Ningrediente(){
 
 function prinrec (){
     console.log("carga bd recetas");
+    //aca vamos a conseguir los ingredientes que tiene el usuario 
+    
+
+    Refusuario.doc(email).get("ingredientesusuario").then((doc) => {
+        if (doc.exists) {    
+            ingredientesquetieneelusuario = doc.data().ingredientesusuario
+            console.log("VOS TNES ESTOS INGREDIENTES:",  ingredientesquetieneelusuario );
+
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    
     Refreceta.orderBy("nombre")
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+            var contador = 0 
+            var porcen 
+            var ingrecetabuscar = doc.data().ingredientes_receta
+            
+
+            /* como alito me lo mostro thenx alito :D
+            ingrecetabuscar.map((ingrediente)=>{
+                console.log(ingrediente)
+                for (var i = 0 ; ingredientesquetieneelusuario.length > i ; i++) {
+                    if (ingrediente ==ingredientesquetieneelusuario[i] ) {
+                        contador++
+                    }
+                }
+            })
+            */
+        
+            for (var i = 0  ; ingrecetabuscar.length >= i; i++) {
+                var pos1 = ingrecetabuscar[i]
+                for (var j = 0  ; ingredientesquetieneelusuario.length >= j ; j++) {
+                    var pos2 = ingredientesquetieneelusuario[j]
+                    if (pos1 == pos2) {
+                        contador++
+                    }
+                }
+            }
+
+            porcen =  ingrecetabuscar.length * 100 / contador
+            console.log(doc.data().nombre +" - " + porcen + "% ingredientes q tenes para la receta")
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title"><div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div></div>
@@ -315,8 +362,6 @@ function misrecetasmostrar (){
     });
 }
 
-
-
 function ingususec(){
     var listingrerec = ""
     var arrayingrediente =[]
@@ -361,17 +406,38 @@ function ingrecar (){
         for (var i = 0 ; i < arrayingrediente.length ; i++) {
             listingrerec += `<option value="`+arrayingrediente[i]+`">`+arrayingrediente[i]+`</option>`
 
-
         }
-
-
 
         $$("#ingrediesmasrec").append(listingrerec); 
     })
     .catch((error) => {
         console.log("Error getting documents: ", error);
     });
+}
 
+
+function usuariocargaringrediente(){
+
+var ingredientesusuario = app.smartSelect.get('.smart-select').$selectEl.val();
+    return Refusuario.doc(email).update({
+        ingredientesusuario: ingredientesusuario
+    })
+    .then(() => {
+        console.log("guardados tus ingredientes");
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+    });
 
 }
 
+function borrarrecetaBD(id) {
+    Refreceta.doc(id).delete().then(() => {
+        console.log("Document successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
+
+//ingredientesqtengo id para escribir los ingredientes que tengo 
