@@ -100,10 +100,10 @@ $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
 $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
-    console.log('receta cargada');
     console.log('Pag. Detalle con id: ' + page.route.params.id );
     preprece(page.route.params.id)  
-    $$("#borrarreceta").on("click", borrarrecetaBD(page.route.params.id)) 
+    $$("#borrarreceta").on("click", function (){
+        borrarrecetaBD(page.route.params.id)}) 
     console.log(email)
     console.log(rol)
     if (rol == "admin") {
@@ -127,12 +127,13 @@ var email
 var cont1
 var cont2
 var usuario
-var rol
 var num = 0
+var rol
 var receta =""
 var ingredientesquetieneelusuario = ""
 var ingrec =""
 var ingredientesR =""
+var pasoCR =""
 var db = firebase.firestore()
 var Refusuario = db.collection("usuarios");//referencia a usuario 
 var Refingredientes = db.collection("ingrediente");//referencia a usuario 
@@ -209,20 +210,20 @@ function autenticar(){
 }
 
 function maspaso (){
-    var paso = ""
+    var paso = "" 
     num++
     paso = $$("#elpaso").val()
+    pasoCR +=  num + "- " + $$("#elpaso").val() + "</br>"
     $$("#CrecP").append(num + "-  "+ paso +"<br>")
     $$("#elpaso").val("")
 }
 
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
-    var pasosCR = $$("#CrecP").text();
     var ingredientesR = app.smartSelect.get('.smart-select').$selectEl.val();
     var data = {
             nombre: nombrereceta,
-            pasos_receta: pasosCR,
+            pasos_receta: pasoCR,
             ingredientes_receta: ingredientesR,
             creador: email,
         }
@@ -235,6 +236,7 @@ function Nreceta() {
     .catch(function(error) { // .catch((error) => {
         console.log("Error es de db: " + error);
     });
+    num = 0
 }
 
 function Ningredieuario(){
@@ -304,7 +306,7 @@ function prinrec (){
             })
             */
         
-            for (var i = 0  ; ingrecetabuscar.length >= i; i++) {
+            for (var i = 0  ; ingrecetabuscar.length > i; i++) {
                 var pos1 = ingrecetabuscar[i]
                 for (var j = 0  ; ingredientesquetieneelusuario.length >= j ; j++) {
                     var pos2 = ingredientesquetieneelusuario[j]
@@ -314,11 +316,14 @@ function prinrec (){
                 }
             }
 
-            porcen =  ingrecetabuscar.length * 100 / contador
+            porcen = 100 * contador / ingrecetabuscar.length
             console.log(doc.data().nombre +" - " + porcen + "% ingredientes q tenes para la receta")
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title"><div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div></div>
+                                    <div class="item-title">
+                                        <div class="col-80 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>
+                                        <div class="col-20">%`+ porcen +`</div>
+                                    </div>
                                 </div>
                             </li>`
             $$("#reprin").append(linkreceta);            
