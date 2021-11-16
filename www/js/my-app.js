@@ -42,12 +42,14 @@ $$(document).on('page:init', function (e) {
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     console.log("inicio index")
+    $$("#titulopag").html("BottanAPP");
     $$("#inic").on("click", iniciar);
 })
 
 $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
-    console.log(e);
+    //console.log(e);
+    $$("#titulopag").html("BottanAPP registro");
     console.log('pag registro cargada');
     $$("#registrar").on("click", autenticar)
 })
@@ -57,6 +59,7 @@ $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
 $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
+    $$("#titulopag").html("BottanAPP");
     console.log('pag principal cargada');
     prinrec()
 
@@ -71,17 +74,17 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
         }
     })
 
-
-
 })
-
 
 $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
     //Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
+    $$("#titulopag").html("ingredientes");
     console.log('pag ingredientes cargada');
     ingususec()
+    mostrarIngredientes()
     $$("#ingreusu").on("click", usuariocargaringrediente)
+    $$("#ingreusu").on("click", mostrarIngredientes)
     console.log(rol)
     if (rol == "admin") {
         $$("#admincar").removeClass('oculto').addClass('visible');
@@ -93,6 +96,7 @@ $$(document).on('page:init', '.page[data-name="ingredientes"]', function (e) {
 $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
+    $$("#titulopag").html("Mis recetas");
     console.log('misrecetas cargada');
     misrecetasmostrar()
 })
@@ -100,6 +104,7 @@ $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
 $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
+    $$("#titulopag").html("receta");
     console.log('Pag. Detalle con id: ' + page.route.params.id );
     preprece(page.route.params.id)  
     $$("#borrarreceta").on("click", function (){
@@ -114,6 +119,7 @@ $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
 
 $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
     console.log('masrecetas cargada');
+    $$("#titulopag").html("cargar receta");
     $$("#AGpaso").on("click", maspaso);
     $$("#nueRes").on("click", Nreceta);
     ingrecar()
@@ -188,6 +194,7 @@ function autenticar(){
                 nombre: nombre,
                 apellido: apellido,
                 rol: "usuario",
+                ingredientesusuario: "" 
             };
             Refusuario.doc(usID).set(data)
             .then(function() { // .then((docRef) => {
@@ -277,7 +284,6 @@ function prinrec (){
         if (doc.exists) {    
             ingredientesquetieneelusuario = doc.data().ingredientesusuario
             console.log("VOS TNES ESTOS INGREDIENTES:",  ingredientesquetieneelusuario );
-
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -295,7 +301,7 @@ function prinrec (){
             var ingrecetabuscar = doc.data().ingredientes_receta
             
 
-            /* como alito me lo mostro thenx alito :D
+            // como alito me lo mostro thenx alito :D
             ingrecetabuscar.map((ingrediente)=>{
                 console.log(ingrediente)
                 for (var i = 0 ; ingredientesquetieneelusuario.length > i ; i++) {
@@ -304,7 +310,7 @@ function prinrec (){
                     }
                 }
             })
-            */
+            /*
         
             for (var i = 0  ; ingrecetabuscar.length > i; i++) {
                 var pos1 = ingrecetabuscar[i]
@@ -315,14 +321,16 @@ function prinrec (){
                     }
                 }
             }
-
+            */
+            
             porcen = 100 * contador / ingrecetabuscar.length
+            
             console.log(doc.data().nombre +" - " + porcen + "% ingredientes q tenes para la receta")
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
-                                        <div class="col-80 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>
-                                        <div class="col-20">%`+ porcen +`</div>
+                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>
+                                        <div class="col-20">%`+ porcen +` de ingredientes</div>
                                     </div>
                                 </div>
                             </li>`
@@ -358,7 +366,9 @@ function misrecetasmostrar (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-100 double"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>`
+            var linkreceta = `<div class="col-45">
+                                <a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a>
+                              </div>`
                 $$("#misrec").append(linkreceta);            
         });
     })
@@ -423,18 +433,17 @@ function ingrecar (){
 
 function usuariocargaringrediente(){
 
-var ingredientesusuario = app.smartSelect.get('.smart-select').$selectEl.val();
-    return Refusuario.doc(email).update({
-        ingredientesusuario: ingredientesusuario
-    })
-    .then(() => {
-        console.log("guardados tus ingredientes");
-    })
-    .catch((error) => {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-    });
-
+    var ingredientesusuario = app.smartSelect.get('.smart-select').$selectEl.val();
+        return Refusuario.doc(email).update({
+            ingredientesusuario: ingredientesusuario
+        })
+        .then(() => {
+            console.log("guardados tus ingredientes");
+        })
+        .catch((error) => {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+        });
 }
 
 function borrarrecetaBD(id) {
@@ -445,4 +454,23 @@ function borrarrecetaBD(id) {
     });
 }
 
-//ingredientesqtengo id para escribir los ingredientes que tengo 
+function mostrarIngredientes() {
+    Refusuario.doc(email).get("ingredientesusuario").then((doc) => {
+        if (doc.exists) {    
+            var ingred = doc.data().ingredientesusuario
+            console.log("VOS TNES ESTOS INGREDIENTES:",  ingredientesquetieneelusuario );
+            
+            $$("#ingredientesqtengo").html("")
+    
+            for (var x = 0 ; x < ingred.length; x++) {
+                $$("#ingredientesqtengo").append(ingred[x] + " - ")   
+            }
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+
+}
