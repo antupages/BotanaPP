@@ -97,13 +97,11 @@
   visibility: hidden;
 }
 
-
-.flex {
-  display: flex;
-}
-
 .fondo {
-  align-self: flex-end;
+  align-content: center;
+  bottom: 80px;
+  position: fixed;
+  width: 80%;
 }
 
 .double {

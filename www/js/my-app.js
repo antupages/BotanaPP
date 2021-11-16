@@ -366,7 +366,7 @@ function misrecetasmostrar (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-45">
+            var linkreceta = `<div class="col-50">
                                 <a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a>
                               </div>`
                 $$("#misrec").append(linkreceta);            
@@ -463,7 +463,7 @@ function mostrarIngredientes() {
             $$("#ingredientesqtengo").html("")
     
             for (var x = 0 ; x < ingred.length; x++) {
-                $$("#ingredientesqtengo").append(ingred[x] + " - ")   
+                $$("#ingredientesqtengo").append(ingred[x] + " - " )   
             }
         } else {
             // doc.data() will be undefined in this case
