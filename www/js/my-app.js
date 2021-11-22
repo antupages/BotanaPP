@@ -37,6 +37,7 @@ $$(document).on('deviceready', function() {
 // Option 1. Using one 'page:init' handler for all pages
 $$(document).on('page:init', function (e) {
     // Do something here when page loaded and initialized
+    $$("#cerrarSesion").on("click" cerrarSe)
 })
 
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
@@ -62,6 +63,9 @@ $$(document).on('page:init', '.page[data-name="prin"]', function (e) {
     $$("#titulopag").html("BottanAPP");
     console.log('pag principal cargada');
     prinrec()
+
+
+    $$("#barraLateral").removeClass("oculto")
 
     searchbar = app.searchbar.create({
         el: '.searchbar',
@@ -473,4 +477,26 @@ function mostrarIngredientes() {
         console.log("Error getting document:", error);
     });
 
+}
+
+function cerrarSe(){
+
+    var logOut = () => {
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+        firebase.auth().signOut()
+            .then(() => {
+                console.log('Cerrar sesión');
+                mainView.router.navigate('/index/');
+            })
+            .catch((error) => {
+                console.log('error '+error);
+            });
+    } else {
+      console.log('Ya cerre sesion');
+    }
+
+    }
+    email = ""
 }
