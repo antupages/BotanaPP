@@ -37,7 +37,7 @@ $$(document).on('deviceready', function() {
 // Option 1. Using one 'page:init' handler for all pages
 $$(document).on('page:init', function (e) {
     // Do something here when page loaded and initialized
-    $$("#cerrarSesion").on("click" cerrarSe)
+    $$("#cerrarSesion").on("click", cerrarSe)
 })
 
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
@@ -328,13 +328,14 @@ function prinrec (){
             */
             
             porcen = 100 * contador / ingrecetabuscar.length
+            var entero = Math.trunc(porcen)
             
-            console.log(doc.data().nombre +" - " + porcen + "% ingredientes q tenes para la receta")
+            console.log(doc.data().nombre +" - " + entero + "% ingredientes q tenes para la receta")
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
                                         <div class="col-80"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>
-                                        <div class="col-20">%`+ porcen +` de ingredientes</div>
+                                        <div class="col-20">%`+ entero +` de ingredientes</div>
                                     </div>
                                 </div>
                             </li>`
@@ -498,5 +499,6 @@ function cerrarSe(){
     }
 
     }
-    email = ""
+    email =""
+    $$("#barraLateral").addClass("oculto")
 }
