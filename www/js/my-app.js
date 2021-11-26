@@ -232,13 +232,16 @@ function maspaso (){
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
     var ingredientesR = app.smartSelect.get('.smart-select').$selectEl.val();
+    var sintacc = $$("#sinTacc").prop('checked') 
     var data = {
             nombre: nombrereceta,
             pasos_receta: pasoCR,
             ingredientes_receta: ingredientesR,
             creador: email,
+            sintacc: sintacc,
         }
     var idreceta = nombrereceta +"-"+ email
+    console.log(sintacc)
     console.log(data , idreceta)
     Refreceta.doc(idreceta).set(data)
     .then(function() { // .then((docRef) => {
@@ -282,8 +285,6 @@ function Ningrediente(){
 function prinrec (){
     console.log("carga bd recetas");
     //aca vamos a conseguir los ingredientes que tiene el usuario 
-    
-
     Refusuario.doc(email).get("ingredientesusuario").then((doc) => {
         if (doc.exists) {    
             ingredientesquetieneelusuario = doc.data().ingredientesusuario
@@ -303,8 +304,7 @@ function prinrec (){
             var contador = 0 
             var porcen 
             var ingrecetabuscar = doc.data().ingredientes_receta
-            
-
+            var sTacc = doc.data().sintacc
             // como alito me lo mostro thenx alito :D
             ingrecetabuscar.map((ingrediente)=>{
                 console.log(ingrediente)
@@ -331,6 +331,9 @@ function prinrec (){
             var entero = Math.trunc(porcen)
             
             console.log(doc.data().nombre +" - " + entero + "% ingredientes q tenes para la receta")
+            
+
+
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
@@ -339,7 +342,24 @@ function prinrec (){
                                     </div>
                                 </div>
                             </li>`
-            $$("#reprin").append(linkreceta);            
+            //----------------------------------------------            
+            var linkrecetaSTCC =`<li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">
+                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`<img src="img/sintacc.png" style="width: 20px"></a></div>
+                                        <div class="col-20">%`+ entero +` de ingredientes</div>
+                                    </div>
+                                </div>
+                            </li>`
+
+            console.log(doc.data().sintacc)
+            
+            if (doc.data().sintacc) {
+                $$("#reprin").append(linkrecetaSTCC);
+            }else{
+                $$("#reprin").append(linkreceta);
+            }
+            
         });
     })
     .catch((error) => {
