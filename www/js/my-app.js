@@ -233,12 +233,20 @@ function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
     var ingredientesR = app.smartSelect.get('.smart-select').$selectEl.val();
     var sintacc = $$("#sinTacc").prop('checked') 
+    var vegetariana = $$("#Vegetar").prop('checked') 
+    var sinAzucar = $$("#diavetes").prop('checked') 
+    var aptoHipertenso = $$("#hiperten").prop('checked') 
+    var sinLactosa = $$("#lactosa").prop('checked') 
     var data = {
             nombre: nombrereceta,
             pasos_receta: pasoCR,
             ingredientes_receta: ingredientesR,
             creador: email,
             sintacc: sintacc,
+            vegetariana: vegetariana,
+            sinAzucar: sinAzucar,
+            aptoHipertenso: aptoHipertenso,
+            sinLactosa: sinLactosa, 
         }
     var idreceta = nombrereceta +"-"+ email
     console.log(sintacc)
@@ -305,6 +313,7 @@ function prinrec (){
             var porcen 
             var ingrecetabuscar = doc.data().ingredientes_receta
             var sTacc = doc.data().sintacc
+           
             // como alito me lo mostro thenx alito :D
             ingrecetabuscar.map((ingrediente)=>{
                 console.log(ingrediente)
@@ -314,52 +323,35 @@ function prinrec (){
                     }
                 }
             })
-            /*
-        
-            for (var i = 0  ; ingrecetabuscar.length > i; i++) {
-                var pos1 = ingrecetabuscar[i]
-                for (var j = 0  ; ingredientesquetieneelusuario.length >= j ; j++) {
-                    var pos2 = ingredientesquetieneelusuario[j]
-                    if (pos1 == pos2) {
-                        contador++
-                    }
-                }
-            }
-            */
-            
+
             porcen = 100 * contador / ingrecetabuscar.length
             var entero = Math.trunc(porcen)
             
             console.log(doc.data().nombre +" - " + entero + "% ingredientes q tenes para la receta")
             
-
+            var aptoselia = ''             
+            var aptoVege= ''             
+            var aptoDiave = ''             
+            var aptoHipper = ''             
+            var aptoIntLact = ''             
+ 
+            if (doc.data().sintacc) { var aptoselia = '<img src="img/sintacc.png" style="width: 20px">' }
+            if (doc.data().vegetariana) { var aptoVege= '<img src="img/vege.png" style="width: 20px">' }
+            if (doc.data().sinAzucar) { var aptoDiave = '<img src="img/sin-azucar.png" style="width: 20px">' }
+            if (doc.data().aptoHipertenso) { var aptoHipper = '<img src="img/sin-sal.png" style="width: 20px">' }
+            if (doc.data().sinLactosa) { var aptoIntLact = '<img src="img/sin-lactosa.png" style="width: 20px">' }
 
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
-                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a></div>
+                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+ doc.data().nombre + aptoselia + aptoVege + aptoDiave + aptoHipper + aptoIntLact + `</a></div>
                                         <div class="col-20">%`+ entero +` de ingredientes</div>
                                     </div>
                                 </div>
                             </li>`
-            //----------------------------------------------            
-            var linkrecetaSTCC =`<li class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">
-                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+doc.data().nombre+`<img src="img/sintacc.png" style="width: 20px"></a></div>
-                                        <div class="col-20">%`+ entero +` de ingredientes</div>
-                                    </div>
-                                </div>
-                            </li>`
+            
+            $$("#reprin").append(linkreceta);
 
-            console.log(doc.data().sintacc)
-            
-            if (doc.data().sintacc) {
-                $$("#reprin").append(linkrecetaSTCC);
-            }else{
-                $$("#reprin").append(linkreceta);
-            }
-            
         });
     })
     .catch((error) => {
