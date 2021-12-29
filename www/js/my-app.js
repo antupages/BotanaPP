@@ -343,8 +343,7 @@ function prinrec (){
             var linkreceta =`<li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
-                                        <div class="col-80"><a href="/receta/`+doc.id+`/">`+ doc.data().nombre + aptoselia + aptoVege + aptoDiave + aptoHipper + aptoIntLact + `</a></div>
-                                        <div class="col-20">%`+ entero +` de ingredientes</div>
+                                        <div class="col-100"><a href="/receta/`+doc.id+`/">     `+ doc.data().nombre + " " +entero + "%" + aptoselia + aptoVege + aptoDiave + aptoHipper + aptoIntLact + `</a></div>
                                     </div>
                                 </div>
                             </li>`
