@@ -104,6 +104,7 @@ $$(document).on('page:init', '.page[data-name="misrecetas"]', function (e) {
     misrecetasmostrar()
 })
 
+
 $$(document).on('page:init', '.page[data-name="receta"]', function (e , page) {
     // Do something here when page with data-name="about" attribute loaded and initialized
     //console.log(e);
@@ -129,10 +130,12 @@ $$(document).on('page:init', '.page[data-name="masrecetas"]', function (e) {
 
 })
 
+
 //mis var---------------------------------------------------------------------------------
 
 
 var email
+var usr
 var cont1
 var cont2
 var usuario
@@ -157,7 +160,7 @@ function iniciar(){
     .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    console.log("Bienvenid@!!! " + email );    
+    console.log("Bienvenid@!!! " + usuario );    
     usuario = email
     //tipo usuario 
     console.log(email)
@@ -165,6 +168,7 @@ function iniciar(){
         if (doc.exists) {
             console.log("Document data:", doc.data());
             rol = doc.data().rol;
+            nombreDeUsuario = doc.data().usr;
             console.log(rol)
             mainView.router.navigate('/prin/');
         }else{console.error("doc no existe")}
@@ -193,12 +197,14 @@ function autenticar(){
             var usID = $$("#rEmail").val()
             var apellido = $$("#rApellido").val()
             var nombre = $$("#rNombre").val()
+            var usr = $$("#rUsuario").val()
             var data = {
-                nombre: nombre,
-                apellido: apellido,
-                rol: "usuario",
-                ingredientesusuario: "" 
-            };
+                    usr:usr,
+                    nombre: nombre,
+                    apellido: apellido,
+                    rol: "usuario",
+                    ingredientesusuario: "" 
+                };
             Refusuario.doc(usID).set(data)
             .then(function() { // .then((docRef) => {
                 console.log("OK!");
@@ -221,43 +227,50 @@ function autenticar(){
 
 function maspaso (){
     var paso = "" 
-    num++
-    paso = $$("#elpaso").val()
-    pasoCR +=  num + "- " + $$("#elpaso").val() + "</br>"
-    $$("#CrecP").append(num + "-  "+ paso +"<br>")
-    $$("#elpaso").val("")
+    contenido = $$("#elpaso").val()
+    if ( contenido != "" ) {
+        num++
+        paso = $$("#elpaso").val()
+        pasoCR +=  num + "- " + $$("#elpaso").val() + "</br>"
+        $$("#CrecP").append(num + "-  "+ paso +"<br>")
+        $$("#elpaso").val("")
+    }
 }
 
 function Nreceta() {
     var nombrereceta =$$("#nombrereceta").val();
     var ingredientesR = app.smartSelect.get('.smart-select').$selectEl.val();
-    var sintacc = $$("#sinTacc").prop('checked') 
-    var vegetariana = $$("#Vegetar").prop('checked') 
-    var sinAzucar = $$("#diavetes").prop('checked') 
-    var aptoHipertenso = $$("#hiperten").prop('checked') 
-    var sinLactosa = $$("#lactosa").prop('checked') 
-    var data = {
-            nombre: nombrereceta,
-            pasos_receta: pasoCR,
-            ingredientes_receta: ingredientesR,
-            creador: email,
-            sintacc: sintacc,
-            vegetariana: vegetariana,
-            sinAzucar: sinAzucar,
-            aptoHipertenso: aptoHipertenso,
-            sinLactosa: sinLactosa, 
+    if (nombrereceta != "" ) {
+        if (ingredientesR != "" ) {
+
+            var sintacc = $$("#sinTacc").prop('checked') 
+            var vegetariana = $$("#Vegetar").prop('checked') 
+            var sinAzucar = $$("#diavetes").prop('checked') 
+            var aptoHipertenso = $$("#hiperten").prop('checked') 
+            var sinLactosa = $$("#lactosa").prop('checked') 
+            var data = {
+                    nombre: nombrereceta,
+                    pasos_receta: pasoCR,
+                    ingredientes_receta: ingredientesR,
+                    creador: nombreDeUsuario,
+                    sintacc: sintacc,
+                    vegetariana: vegetariana,
+                    sinAzucar: sinAzucar,
+                    aptoHipertenso: aptoHipertenso,
+                    sinLactosa: sinLactosa, 
+                }
+            var idreceta = nombrereceta +"-"+ email
+            Refreceta.doc(idreceta).set(data)
+            .then(function() { // .then((docRef) => {
+                console.log("OK!");
+            })
+            .catch(function(error) { // .catch((error) => {
+                console.log("Error es de db: " + error);
+            });
+            num = 0
+            mainView.router.navigate('/prin/');
         }
-    var idreceta = nombrereceta +"-"+ email
-    console.log(sintacc)
-    console.log(data , idreceta)
-    Refreceta.doc(idreceta).set(data)
-    .then(function() { // .then((docRef) => {
-        console.log("OK!");
-    })
-    .catch(function(error) { // .catch((error) => {
-        console.log("Error es de db: " + error);
-    });
-    num = 0
+    }
 }
 
 function Ningredieuario(){
@@ -381,8 +394,8 @@ function misrecetasmostrar (){
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            var linkreceta = `<div class="col-50">
-                                <a href="/receta/`+doc.id+`/">`+doc.data().nombre+`</a>
+            var linkreceta = `<div class="col-100">
+                                <a href="/receta/`+doc.id+`/"><p class="double">`+doc.data().nombre+`</p></a>
                               </div>`
                 $$("#misrec").append(linkreceta);            
         });
