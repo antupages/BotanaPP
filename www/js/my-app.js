@@ -347,6 +347,7 @@ function prinrec (){
             var aptoHipper = ''             
             var aptoIntLact = ''             
  
+ 
             if (doc.data().sintacc) { var aptoselia = '<img src="img/sintacc.png" style="width: 20px">' }
             if (doc.data().vegetariana) { var aptoVege= '<img src="img/vege.png" style="width: 20px">' }
             if (doc.data().sinAzucar) { var aptoDiave = '<img src="img/sin-azucar.png" style="width: 20px">' }
@@ -390,7 +391,7 @@ function preprece(id) {
 }
 
 function misrecetasmostrar (){
-    Refreceta.where("creador", "==", email )  
+    Refreceta.where("creador", "==", nombreDeUsuario/* aca nombre de reseta*/ )  
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
